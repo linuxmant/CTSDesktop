@@ -1,0 +1,30 @@
+﻿<Window x:Name="Splash" x:Class="CTSDesktop.Views.SplashView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CTSDesktop"
+        mc:Ignorable="d"
+        Title="Splash" Height="400" Width="600" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+    <Window.Background>
+        <ImageBrush ImageSource="../media/carbon-mesh-land.png"/>
+    </Window.Background>
+    <DockPanel>
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top" HorizontalAlignment="Left">
+            <Label Name="Title1" Content="Chemical Translation Service" 
+               FontSize="48"
+               Height="Auto"
+               VerticalAlignment="Top"
+               Foreground="#FFB0B0B0"
+               FontFamily="Californian FB" 
+               Cursor="None" Padding="10" Background="Black"/>
+        </StackPanel>
+        <Label Name="Status"
+               DockPanel.Dock="Bottom"
+               Content="Waiting..."
+               Foreground="#ffcccccc"
+               VerticalAlignment="Bottom"
+               HorizontalAlignment="Left"/>
+    </DockPanel>
+</Window>
