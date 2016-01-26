@@ -1,8 +1,8 @@
-﻿<Application x:Class="CTSDesktop.App"
+﻿<Application x:Class="Fiehnlab.CTSDesktop.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CTSDesktop"
-             StartupUri="Views/Splash.xaml">
+             xmlns:local="clr-namespace:Fiehnlab.CTSDesktop"
+             StartupUri="/Views/Splash.xaml">
     <Application.Resources>
          
     </Application.Resources>

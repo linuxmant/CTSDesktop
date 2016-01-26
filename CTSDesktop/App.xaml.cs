@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using Fiehnlab.CTSDesktop.ViewModels;
+using Fiehnlab.CTSDesktop.Views;
+using System;
+using System.Threading;
 
-namespace CTSDesktop {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application {
-    }
+namespace Fiehnlab.CTSDesktop {
+	/// <summary>
+	/// Interaction logic for App.xaml
+	/// </summary>
+	public partial class App : Application {}
 }

@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTSDesktop", "CTSDesktop\CTSDesktop.csproj", "{19849A67-D010-4EEF-9B98-BD8B44D18C1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTSRestTests", "CTSRestClientTests\CTSRestTests.csproj", "{C7383DE7-6005-4DB5-AB1A-DE9A1357C640}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTSRest", "CtsRestClient\CTSRest.csproj", "{3F2313C1-7939-4447-858A-6AFCDA961B4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{19849A67-D010-4EEF-9B98-BD8B44D18C1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19849A67-D010-4EEF-9B98-BD8B44D18C1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19849A67-D010-4EEF-9B98-BD8B44D18C1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7383DE7-6005-4DB5-AB1A-DE9A1357C640}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7383DE7-6005-4DB5-AB1A-DE9A1357C640}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7383DE7-6005-4DB5-AB1A-DE9A1357C640}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7383DE7-6005-4DB5-AB1A-DE9A1357C640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
