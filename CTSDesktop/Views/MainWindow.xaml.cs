@@ -30,15 +30,6 @@ namespace Fiehnlab.CTSDesktop.Views {
         protected override void OnClosing(CancelEventArgs e) {
             isClosing = true;
         }
-
-		private void ToValues_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-
-		}
-
-		private void ChangePropertyAction_SourceUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
-		{
-
-		}
 	}
 }
 
