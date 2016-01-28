@@ -6,13 +6,15 @@ using System.Windows;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace Fiehnlab.CTSDesktop.ViewModels {
     class MainWindowViewModel : ViewModelBase {
 		private List<string> fromValues;
 		private List<string> toValues;
-        private string fromTxt = "";
-        private string toTxt = "";
+        private string currentFrom;
+        private List<string> currentTo = new List<string>();
         private string currentStep = "home";
 
         private readonly CtsRestClient ctsClient = new CtsRestClient();
@@ -29,6 +31,8 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
             bgWorker.DoWork += new DoWorkEventHandler((s, args) => loadFromValues(s, args));
 
             bgWorker.RunWorkerAsync();
+
+			currentTo.Add("InChIKey");
 		}
 
         #region BackgroundWorker definition
@@ -38,7 +42,8 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
             timer.Start();
             ToValues = ctsClient.GetToValues();
             timer.Stop();
-            ToTxt += string.Format(" .. {0}ms", timer.ElapsedMilliseconds);
+			//check 'InChiKey' by default
+
         }
 
         private void loadFromValues(object sender, DoWorkEventArgs args) {
@@ -46,11 +51,13 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
             timer.Start();
             FromValues = ctsClient.GetFromValues();
             timer.Stop();
-            FromTxt += string.Format(" .. {0}ms", timer.ElapsedMilliseconds);
+
+			//select 'chemical name' by default
+			CurrentFrom = FromValues.Find(e => e.ToLower() == "chemical name");
         }
         #endregion
 
-        #region properties
+        #region Properties
         /// <summary>
         /// FromValues property accessors
         /// </summary>
@@ -63,18 +70,18 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 			}
 		}
 
-        public string FromTxt {
-            get { return fromTxt; }
+        public string CurrentFrom {
+            get { return currentFrom; }
             set {
-                fromTxt = value;
+                currentFrom = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public string ToTxt
+        public List<string> CurrentTo
         {
-            get { return toTxt; }
-            set { toTxt = value;
+            get { return currentTo; }
+            set { currentTo = value;
                 NotifyPropertyChanged();
             }
         }
@@ -124,6 +131,18 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
         {
             get { return convertCommand ?? (convertCommand = new DelegateCommand(s => loadFromValues(this, null))); }
         }
-        #endregion
-    }
+		#endregion
+
+		#region ValueConverters
+		public class ItemNumberConverter : IValueConverter {
+			public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+				return String.Format("Items: {0}", value);
+			}
+
+			public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+				return value;
+			}
+		}
+		#endregion
+	}
 }
