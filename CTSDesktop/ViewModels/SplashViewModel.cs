@@ -1,110 +1,108 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Fiehnlab.CTSDesktop.MVVM;
-using Fiehnlab.CTSDesktop.Views;
 using Fiehnlab.CTSRest;
 using System.Threading;
-using System.Windows.Input;
 using Fiehnlab.CTSDesktop.Commands;
-using System;
 using System.Windows;
 using System.Reflection;
 using System.Diagnostics;
+using System.Windows.Threading;
+using System;
 
 namespace Fiehnlab.CTSDesktop.ViewModels {
-	internal class SplashViewModel : ViewModelBase {
+    internal class SplashViewModel : ViewModelBase {
 		private CtsRestClient ctsClient = new CtsRestClient();
-		private BackgroundWorker bgWorker = new BackgroundWorker();
+		private BackgroundWorker bgLoad = new BackgroundWorker();
 
-		#region Properties
-		private List<string> fromValues;
-		public List<string> FromValues
+        private List<string> fromValues;
+        private List<string> toValues;
+        private string version;
+        private string status;
+
+        #region Properties
+        public List<string> FromValues
 		{
-			get { return fromValues; }
+			get { return fromValues ?? new List<string>(); }
 			private set {
 				fromValues = value;
-				NotifyPropertyChanged("FromValues");
+				NotifyPropertyChanged();
 			}
 		}
 
-		private List<string> toValues;
 		public List<string> ToValues
 		{
-			get { return toValues; }
+			get { return toValues ?? new List<string>(); }
 			private set {
 				this.toValues = value;
-				NotifyPropertyChanged("ToValues");
+				NotifyPropertyChanged();
 			}
 		}
 
-		private string version;
-		public string Version {
-			get { return version; }
-			private set {
-				version = value;
-				NotifyPropertyChanged("Version");
-			} 
-		}
-		#endregion
+        public string Version
+        {
+            get { return version ?? (version = Assembly.GetExecutingAssembly().GetName().Version.ToString()); }
+            private set
+            {
+                version = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-		/// <summary>
-		/// Creates a new instance of the splash view model to get conversion sources from server
-		/// </summary>
-		public SplashViewModel(SplashView splash) {
-			MessageBox.Show("creating VM");
-			Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        public string Status
+        {
+            get { return status ?? "Initializing..."; }
+            private set
+            {
+                status = value;
+                NotifyPropertyChanged();
+            }
+        }
+        #endregion
 
-			loadIdNameValuesCommand = new DelegateCommand(LoadIdNameValues, CanLoadIdNames);
-			showMessageCommand = new DelegateCommand((s) => { Debug.Print(string.Format("Message: {0}", s.ToString())); }, (s) => { return splash.IsLoaded; });
-			showMessageCommand.RaiseCanExecuteChanged();
+        /// <summary>
+        /// Creates a new instance of the splash view model to get conversion sources from server
+        /// </summary>
+        public SplashViewModel() {
+            LoadIdNameValuesCommand = new DelegateCommand(LoadIdNameValues);
+        }
 
-			splash.Show();
+        private void something() { 
 
-			Thread.Sleep(1000);
+            bgLoad.DoWork += (sender, args) => {
+                // call REST service to get toValues and populate properties
+                ToValues = ctsClient.GetToValues();
+                string msg = string.Format("Loaded {0} TO values", ToValues.Count);
+                Status = msg;
+                MessageBox.Show(msg);
+                Thread.Sleep(1500);
+                FromValues = ctsClient.GetFromValues();
+                msg = string.Format("Loaded {0} TO values", FromValues.Count);
+                Status = msg;
+                MessageBox.Show(msg);
+                Thread.Sleep(1500);
+            };
 
-			splash.Close();
-		}
+        }
 
-		#region Commands
-		private DelegateCommand loadIdNameValuesCommand;
+        #region Commands
+        private DelegateCommand loadIdNameValuesCommand;
 		public DelegateCommand LoadIdNameValuesCommand
 		{
-			get
-			{
-				if (loadIdNameValuesCommand == null) {
-					loadIdNameValuesCommand = new DelegateCommand(LoadIdNameValues, CanLoadIdNames);
-				}
-				return loadIdNameValuesCommand;
-			}
+			get { return loadIdNameValuesCommand ?? (loadIdNameValuesCommand = new DelegateCommand(LoadIdNameValues)); }
 			private set {
 				loadIdNameValuesCommand = value;
-				NotifyPropertyChanged("LoadIdNameValuesCommand");
+				NotifyPropertyChanged();
 			}
 		}
 
 		private bool CanLoadIdNames(object obj) {
-			return (ToValues.Count <=0 && FromValues.Count <=0);
+			return (ToValues.Count < 1 && FromValues.Count < 1);
 		}
 
 		private void LoadIdNameValues(object obj) {
-			// call REST service to get toValues and populate properties
-			MessageBox.Show("about to laod stuff...");
-			ToValues = ctsClient.GetToValues();
-			MessageBox.Show("laoded ToValues...");
-			Thread.Sleep(2000);
-			FromValues = ctsClient.GetFromValues();
-			MessageBox.Show("laoded FromValues...");
-			Thread.Sleep(2000);
-			MessageBox.Show("done laoding stuff...");
-		}
-
-
-		private readonly DelegateCommand showMessageCommand;
-		public DelegateCommand ShowMessageCommand
-		{
-			get { return showMessageCommand;  }
-		}
-
+            bgLoad.RunWorkerAsync();
+        }
 		#endregion
 	}
 }
