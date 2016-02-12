@@ -4,8 +4,8 @@ using System.Windows.Input;
 
 namespace Fiehnlab.CTSDesktop.Commands {
 	public class DelegateCommand : ICommand {
-		private readonly Predicate<object> _canExecute;
-		private readonly Action<object> _execute;
+		private readonly Predicate<object> canExecute;
+		private readonly Action<object> execute;
 
 		public event EventHandler CanExecuteChanged {
 			add { CommandManager.RequerySuggested += value; }
@@ -18,19 +18,53 @@ namespace Fiehnlab.CTSDesktop.Commands {
 
 		public DelegateCommand(Action<object> execute,
 					   Predicate<object> canExecute) {
-			_execute = execute;
-			_canExecute = canExecute;
+			this.execute = execute;
+			this.canExecute = canExecute;
 		}
 
 		[DebuggerStepThrough]
 		public bool CanExecute(object parameter) {
-			return _canExecute == null ? true : _canExecute(parameter);
-
-			return _canExecute(parameter);
+			return canExecute == null ? true : canExecute(parameter);
 		}
 
 		public void Execute(object parameter) {
-			_execute(parameter);
+			execute(parameter);
+		}
+	}
+
+
+	public class DelegateCommand<T> : ICommand
+	{
+		private readonly Predicate<T> canExecute;
+		private readonly Action<T> execute;
+
+		public event EventHandler CanExecuteChanged
+		{
+			add { CommandManager.RequerySuggested += value; }
+			remove { CommandManager.RequerySuggested -= value; }
+		}
+
+		public DelegateCommand(Action<T> execute)
+					   : this(execute, null)
+		{
+		}
+
+		public DelegateCommand(Action<T> execute,
+					   Predicate<T> canExecute)
+		{
+			this.execute = execute;
+			this.canExecute = canExecute;
+		}
+
+		[DebuggerStepThrough]
+		public bool CanExecute(object parameter)
+		{
+			return canExecute == null ? true : canExecute((T)parameter);
+		}
+
+		public void Execute(object parameter)
+		{
+			execute((T)parameter);
 		}
 	}
 }

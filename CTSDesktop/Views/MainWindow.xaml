@@ -4,28 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fiehnlab.CTSDesktop.Views"
+        xmlns:vm="clr-namespace:Fiehnlab.CTSDesktop.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
-        Name="Main"
-        Title="CTSDesktop" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        MaxWidth="1024" MaxHeight="768"
+        x:Name="Main" SizeToContent="Height">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding CloseCommand}" />
         </i:EventTrigger>
-        <!--<i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadIdNamesCommand}" />
-        </i:EventTrigger>-->
     </i:Interaction.Triggers>
 
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#373737" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Margin" Value="10" />
             <Setter Property="MinWidth" Value="85" />
-            <!--<Setter Property="SnapsToDevicePixels" Value="True" />-->
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#FFAFAFAF" Offset="0"/>
+                        <GradientStop Color="#FF505050" Offset="0.45"/>
+                        <GradientStop Color="#373737" Offset="0.75"/>
+                        <GradientStop Color="#595959" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -39,13 +46,29 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="GhostWhite" />
-                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#FFAFAFD7" Offset="0"/>
+                                            <GradientStop Color="#FF505082" Offset="0.45"/>
+                                            <GradientStop Color="#FF37375F" Offset="0.75"/>
+                                            <GradientStop Color="#FF5A5A82" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
 
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="DimGray" />
-                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#FF9696BE" Offset="1"/>
+                                            <GradientStop Color="#FF37375F" Offset="0.45"/>
+                                            <GradientStop Color="#FF505082" Offset="0.75"/>
+                                            <GradientStop Color="#FF787896" Offset="0"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -55,87 +78,124 @@
 
         <StackPanel x:Key="ConvertButtonContent">
             <Label Name="Caption" Content="Convert" 
-                   Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"/>
-            <Label Name="Items" Content="{Binding Path=ConvertItemCount, FallbackValue=0}" 
+                   Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
+            <Label Name="Items" Content="{Binding ConvertItemCount, FallbackValue=0}" 
                    ContentStringFormat="Items: {0}"
                    FontSize="10" 
-                   Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"/>
+                   Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
         </StackPanel>
-
-        <DataTemplate x:Key="ItemDataTemplate">
-            <CheckBox x:Name="checkbox" 
-                      Content="{Binding}"
-                      IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}"/>
+        
+        <DataTemplate x:Key="CheckListItem">
+            <StackPanel Margin="2" Orientation="Horizontal">
+                <CheckBox x:Name="idChecked" Checked="{Binding Selected}"/>
+                <Label x:Name="sourceName" Height="25" Content="{Binding Name}"/>
+            </StackPanel>
         </DataTemplate>
 
-        <ControlTemplate x:Key="ItemTemplate" TargetType="ListViewItem">
-            <Border BorderThickness="{TemplateBinding BorderThickness}"
-                    Padding="{TemplateBinding Padding}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    Background="{TemplateBinding Background}"
-                    SnapsToDevicePixels="True">
-                <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
-                                  ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                  HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                  SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-            </Border>
-        </ControlTemplate>
-
-        <Style TargetType="ListViewItem">
-            <Setter Property="Template" Value="{StaticResource ItemTemplate}" />
-        </Style>
+        <vm:MainWindowViewModel x:Key="MainViewModel"/>
     </Window.Resources>
-    
-    <DockPanel>
+
+    <DockPanel x:Name="LayoutRoot" DataContext="{StaticResource MainViewModel}" LastChildFill="True">
         <!--<Menu DockPanel.Dock="Top">
+            <MenuItem Header="File"/>
+            <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
         </Menu>-->
-        <StackPanel x:Name="Shell" Orientation="Vertical" DockPanel.Dock="Bottom">
-            <StackPanel x:Name="TopControls" Orientation="Horizontal">
-                <StackPanel Orientation="Vertical" Margin="10" Width="300" Height=" 200" HorizontalAlignment="Left">
-                    <Label Name="LabelFrom" Content="Convert From"/>
-                    <ComboBox x:Name="FromValues" Height="25" 
-                    	ItemsSource="{Binding FromValues}" 
-                    	SelectedItem="{Binding CurrentFrom}"
-                    	IsSynchronizedWithCurrentItem="False"
-                    	ToolTip="Select source ID"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="10" Width="300" Height="200" HorizontalAlignment="Right">
-                    <Label x:Name="LabelTo" Content="Convert To"/>
-                    <ListView x:Name="ToValues" MaxHeight="150"
-                              ItemsSource="{Binding ToValues}" 
-                              ItemTemplate="{StaticResource ItemDataTemplate}"
-                              SelectedItem="{Binding CurrentTo}"
-                              SelectionMode="Multiple"
-                              ToolTip="Select destination IDs" 
-                              HorizontalContentAlignment="Stretch" 
-                              VerticalContentAlignment="Stretch" ClipToBounds="True">
+
+        <StackPanel Orientation="Horizontal" 
+                    DockPanel.Dock="Bottom" 
+                    Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                    Height="25">
+            <Label x:Name="status" 
+                   Content="{Binding CurrentFrom, FallbackValue=designing...}" 
+                   Margin="1" />
+        </StackPanel>
+
+        <DockPanel x:Name="Shell" 
+                    DockPanel.Dock="Top">
+            <Border Name="TopControls" Margin="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="5" DockPanel.Dock="Top">
+                <Grid x:Name="TopControlsGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="10"
+                                Grid.Column="0" Grid.Row="0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <!--<i:InvokeCommandAction Command="{Binding ToValuesChangedCommand, ElementName=ToValues}" CommandParameter="{Binding SelectedItems}"/>-->
-                                <!--<ei:ChangePropertyAction PropertyName="Text" TargetName="Keywords"/>-->
+                                <i:InvokeCommandAction Command="{Binding UpdateFrom}" 
+                                                       CommandParameter="{Binding FromValues}"/>
+                                <ei:ChangePropertyAction PropertyName="Text" TargetName="Keywords"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </ListView>
-                </StackPanel>
-            </StackPanel>
+                        <Label x:Name="LabelFrom" Content="Convert From"/>
+                        <ComboBox x:Name="FromValues" MinHeight="25" 
+                    	    ItemsSource="{Binding FromValuesList}" 
+                    	    SelectedItem="{Binding CurrentFrom}"
+                    	    IsSynchronizedWithCurrentItem="True"
+                    	    ToolTip="Select source ID"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical"
+                                Grid.Column="1" Grid.Row="0"
+                                Margin="10">
+                        <Label x:Name="LabelTo" Content="Convert To"/>
+                        <!--ItemTemplate="{StaticResource ItemDataTemplate}"
+                                 ItemsSource="{Binding ToValues, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
+                                 SelectedItem="{Binding CurrentTo, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"-->
+                        <ListBox x:Name="ToValues" MaxHeight="150" MinHeight="25"
+                                 ItemsSource="{Binding Path=ToValuesList}"
+                                 ItemTemplate="{StaticResource CheckListItem}"
+                                 SelectionMode="Multiple"
+                                 ToolTip="Select destination IDs">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding UpdateSelectedTo}" 
+                                                           CommandParameter="{Binding ToValues}"/>
+                                    <ei:ChangePropertyAction PropertyName="Text" TargetName="Keywords"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ListBox>
+                        <ListBox x:Name="test" 
+                                 ItemsSource="{Binding CurrentTo, UpdateSourceTrigger=PropertyChanged}"
+                                 MinHeight="25"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-            <StackPanel x:Name="BottomControls" Orientation="Horizontal" Margin="10">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Width="769" VerticalAlignment="Bottom">
-                    <Label x:Name="LabelKeys" Content="Keywords"/>
-                    <ScrollViewer BorderThickness="1" VerticalAlignment="Stretch">
-                        <TextBlock x:Name="Keywords" Text="{Binding Keywords, Mode=TwoWay}" Height="250">
-                            Insert values to search for
-                        </TextBlock>
-                    </ScrollViewer>
-                    <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <DockPanel x:Name="BottomControls" LastChildFill="True" DockPanel.Dock="Bottom">
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="5" 
+                        Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                        VerticalAlignment="Bottom"
+                        DockPanel.Dock="Bottom">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Command="{Binding ConvertCommand}"
                                 Content="{StaticResource ConvertButtonContent}" />
                         <Button Content="Exit" 
-                                Command="{Binding CloseCommand}" />
+                                Command="{Binding CloseCommand}" 
+                                CommandParameter="{Binding ElementName=Main}"/>
                     </StackPanel>
-                </StackPanel>
-            </StackPanel>
-        </StackPanel>
+                </Border>
+                <Border BorderThickness="1" CornerRadius="5" BorderBrush="Gray" Padding="10" Margin="5" DockPanel.Dock="Top" VerticalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical" >
+                        <Label x:Name="LabelKeys" Content="Keywords"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="True" Padding="5">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock x:Name="Keywords" Text="{Binding CurrentTo.Count, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" MinHeight="250" Margin="5"/>
+                                <!--<TextBox Name="Keywords" 
+                                       Text="{Binding Keywords, Mode=TwoWay}" 
+                                       Height="250" 
+                                       MinLines="10"
+                                       MaxLines="10"
+                                       AcceptsReturn="True"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Justify" 
+                                       HorizontalContentAlignment="Stretch" 
+                                       VerticalContentAlignment="Stretch">
+                            </TextBox>-->
+                            </Border>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </DockPanel>
     </DockPanel>
 </Window>

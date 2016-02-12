@@ -80,9 +80,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="design\DesignDataSourceImpl.cs" />
+    <Compile Include="design\IDataService.cs" />
     <Compile Include="Models\IDSource.cs" />
     <Compile Include="Models\NameList.cs" />
     <Compile Include="MVVM\ViewModelBase.cs" />
+    <Compile Include="Utilities\CtsDataService.cs" />
     <Compile Include="Utilities\NotifierBase.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RestSharp;
 using System.Diagnostics;
-using System.ComponentModel;
-using System.Net;
 
-namespace Fiehnlab.CTSRest {
-	public class CtsRestClient {
+namespace Fiehnlab.CTSRest
+{
+	public class IDataSource {
 
 		private RestClient client;
 
 		/// <summary>
 		/// Creates a new REST client to call the CTS
 		/// </summary>
-		public CtsRestClient() {
+		public IDataSource() {
 			Client = new RestClient( Properties.Resources.CTS_URL);
 		}
 

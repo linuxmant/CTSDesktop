@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace Fiehnlab.CTSDesktop.Utilities {
+namespace Fiehnlab.CTSDesktop.Utilities
+{
 	class NotifierBase : INotifyPropertyChanged {
 
 		#region INotifyPropertyChanges members
