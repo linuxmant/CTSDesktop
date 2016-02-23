@@ -2,7 +2,7 @@
 
 namespace Fiehnlab.CTSDesktop.Utilities
 {
-	class NotifierBase : INotifyPropertyChanged {
+	public class NotifierBase : INotifyPropertyChanged {
 
 		#region INotifyPropertyChanges members
 		public event PropertyChangedEventHandler PropertyChanged;

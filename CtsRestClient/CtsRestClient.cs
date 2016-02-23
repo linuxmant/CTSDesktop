@@ -4,14 +4,14 @@ using System.Diagnostics;
 
 namespace Fiehnlab.CTSRest
 {
-	public class IDataSource {
+	public class CtsRestClient {
 
 		private RestClient client;
 
 		/// <summary>
 		/// Creates a new REST client to call the CTS
 		/// </summary>
-		public IDataSource() {
+		public CtsRestClient() {
 			Client = new RestClient( Properties.Resources.CTS_URL);
 		}
 

@@ -14,11 +14,7 @@ namespace Fiehnlab.CTSDesktop.MVVM
   public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
   {
     #region Constructor
-
-    protected ViewModelBase()
-    {
-    }
-
+    internal ViewModelBase() {}
     #endregion // Constructor
 
     #region DisplayName

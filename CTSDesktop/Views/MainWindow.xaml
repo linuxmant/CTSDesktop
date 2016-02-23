@@ -1,15 +1,16 @@
-﻿<Window x:Class="Fiehnlab.CTSDesktop.Views.MainWindow"
+﻿<Window x:Class="Fiehnlab.CTSDesktop.Views.MainWindow" x:Name="MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Fiehnlab.CTSDesktop.Views"
+        xmlns:v="clr-namespace:Fiehnlab.CTSDesktop.Views"
         xmlns:vm="clr-namespace:Fiehnlab.CTSDesktop.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
         MaxWidth="1024" MaxHeight="768"
-        x:Name="Main" SizeToContent="Height">
+        SizeToContent="Height"
+        DataContext="MainWindowViewModel">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding CloseCommand}" />
@@ -84,18 +85,12 @@
                    FontSize="10" 
                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
         </StackPanel>
-        
-        <DataTemplate x:Key="CheckListItem">
-            <StackPanel Margin="2" Orientation="Horizontal">
-                <CheckBox x:Name="idChecked" Checked="{Binding Selected}"/>
-                <Label x:Name="sourceName" Height="25" Content="{Binding Name}"/>
-            </StackPanel>
-        </DataTemplate>
 
-        <vm:MainWindowViewModel x:Key="MainViewModel"/>
+        <!--<vm:MainWindowViewModel x:Key="MainViewModel"/>-->
     </Window.Resources>
 
-    <DockPanel x:Name="LayoutRoot" DataContext="{StaticResource MainViewModel}" LastChildFill="True">
+    <DockPanel x:Name="LayoutRoot" LastChildFill="True" >
+        <!--DataContext="{StaticResource MainViewModel}"-->
         <!--<Menu DockPanel.Dock="Top">
             <MenuItem Header="File"/>
             <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
@@ -142,21 +137,30 @@
                                  ItemsSource="{Binding ToValues, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
                                  SelectedItem="{Binding CurrentTo, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"-->
                         <ListBox x:Name="ToValues" MaxHeight="150" MinHeight="25"
-                                 ItemsSource="{Binding Path=ToValuesList}"
-                                 ItemTemplate="{StaticResource CheckListItem}"
+                                 ItemsSource="{Binding ToValuesList}"
                                  SelectionMode="Multiple"
-                                 ToolTip="Select destination IDs">
-                            <i:Interaction.Triggers>
+                                 ToolTip="Select destination IDs" 
+                                 SelectionChanged="ToValues_SelectionChanged">
+                            <!--<ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="2" Orientation="Horizontal" Background="White">
+                                        <CheckBox x:Name="idChecked" 
+                                                  Content="{Binding Name, FallbackValue=testValue}" 
+                                                  IsChecked="{Binding idChecked}" 
+                                                  Height="25"/>
+                                        --><!--<Label x:Name="sourceName" Height="25" Content="{Binding Name, FallbackValue='test value'}" MinWidth="50" VerticalAlignment="Center"/>--><!--
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>-->
+
+                            <!--<i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding UpdateSelectedTo}" 
                                                            CommandParameter="{Binding ToValues}"/>
                                     <ei:ChangePropertyAction PropertyName="Text" TargetName="Keywords"/>
                                 </i:EventTrigger>
-                            </i:Interaction.Triggers>
+                            </i:Interaction.Triggers>-->
                         </ListBox>
-                        <ListBox x:Name="test" 
-                                 ItemsSource="{Binding CurrentTo, UpdateSourceTrigger=PropertyChanged}"
-                                 MinHeight="25"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -171,7 +175,7 @@
                                 Content="{StaticResource ConvertButtonContent}" />
                         <Button Content="Exit" 
                                 Command="{Binding CloseCommand}" 
-                                CommandParameter="{Binding ElementName=Main}"/>
+                                CommandParameter="{Binding ElementName=MainView}"/>
                     </StackPanel>
                 </Border>
                 <Border BorderThickness="1" CornerRadius="5" BorderBrush="Gray" Padding="10" Margin="5" DockPanel.Dock="Top" VerticalAlignment="Stretch">

@@ -29,7 +29,7 @@ namespace Fiehnlab.CTSRestTests {
 
 		[TestMethod]
 		public void testGetToValues() {
-			var client = new IDataSource();
+			var client = new CtsRestClient();
 
 			List<string> idNames = new List<string>();
 			idNames = client.GetToValues();
@@ -46,7 +46,7 @@ namespace Fiehnlab.CTSRestTests {
 
 		[TestMethod]
 		public void testGetFromValues() {
-			var client = new IDataSource();
+			var client = new CtsRestClient();
 
 			List<string> idNames = new List<string>();
 			idNames = client.GetFromValues();

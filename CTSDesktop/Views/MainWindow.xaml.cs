@@ -1,9 +1,10 @@
 ﻿using Fiehnlab.CTSDesktop.ViewModels;
-using System;
 using System.Windows;
 using System.ComponentModel;
-using Fiehnlab.CTSDesktop.design;
+using Fiehnlab.CTSDesktop.Design;
 using System.Windows.Controls;
+using Fiehnlab.CTSDesktop.Data;
+using System;
 
 namespace Fiehnlab.CTSDesktop.Views
 {
@@ -16,13 +17,32 @@ namespace Fiehnlab.CTSDesktop.Views
         public MainWindow() {
             InitializeComponent();
 
-			MainWindowViewModel mwvm = new MainWindowViewModel(new DesignDataServiceImpl());
-			//DataContext = mwvm;
+			MainWindowViewModel mwvm;
+			if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+			{
+				MessageBox.Show("InDesign");
+				mwvm = new MainWindowViewModel(new DesignDataServiceImpl());
+			}
+			else
+			{
+				mwvm = new MainWindowViewModel(new CtsDataService());
+			}
+
+			DataContext = mwvm;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			isClosing = true;
+		}
+
+		private void ToValues_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			var box = (ListBox)sender;
+
+			//box.SelectedItems.Count;
+
+			MessageBox.Show("Selected: " + string.Join(", ", box.SelectedItems.Count));
 		}
 	}
 }

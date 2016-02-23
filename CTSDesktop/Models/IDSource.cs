@@ -2,7 +2,7 @@
 
 namespace Fiehnlab.CTSDesktop.Models
 {
-	class IDSource : ViewModelBase {
+	public class IDSource : ViewModelBase {
 
 		private string name;
 		private bool selected;

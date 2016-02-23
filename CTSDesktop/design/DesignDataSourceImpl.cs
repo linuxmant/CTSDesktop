@@ -1,23 +1,24 @@
-﻿using Fiehnlab.CTSDesktop.Models;
-using System.Collections.ObjectModel;
+﻿using Fiehnlab.CTSDesktop.Data;
+using Fiehnlab.CTSDesktop.Models;
+using System.Collections.Generic;
 
-namespace Fiehnlab.CTSDesktop.design
+namespace Fiehnlab.CTSDesktop.Design
 {
-	class DesignDataServiceImpl : IDataService
+	public class DesignDataServiceImpl : IDataService
 	{
-		public ObservableCollection<IDSource> GetToIDSources()
+		public List<string> GetToIDSources()
 		{
-			NameList names = new NameList();
+			List<string> names = new List<string>();
 
-			for(int i=0; i< 10; i++)
+			for (int i = 0; i < 10; i++)
 			{
-				names.Add(new IDSource(string.Format("test {0}", i)));
+				names.Add(string.Format("test {0}", i));
 			}
 
-			return new ObservableCollection<IDSource>(names.ToList());
+			return new List<string>(names);
 		}
 
-		public ObservableCollection<IDSource> GetFromIDSources()
+		public List<string> GetFromIDSources()
 		{
 			return GetToIDSources();
 		}

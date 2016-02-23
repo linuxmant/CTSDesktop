@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTSRestTests", "CTSRestClie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTSRest", "CtsRestClient\CTSRest.csproj", "{3F2313C1-7939-4447-858A-6AFCDA961B4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTSDesktopTests", "CTSDesktopTests\CTSDesktopTests.csproj", "{28A1A86F-639B-4CD5-AD92-54D426BCD299}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F2313C1-7939-4447-858A-6AFCDA961B4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28A1A86F-639B-4CD5-AD92-54D426BCD299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28A1A86F-639B-4CD5-AD92-54D426BCD299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28A1A86F-639B-4CD5-AD92-54D426BCD299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28A1A86F-639B-4CD5-AD92-54D426BCD299}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

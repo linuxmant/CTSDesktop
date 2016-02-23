@@ -58,6 +58,7 @@
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -80,13 +81,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="design\DesignDataSourceImpl.cs" />
-    <Compile Include="design\IDataService.cs" />
+    <Compile Include="Design\DesignDataSourceImpl.cs" />
+    <Compile Include="Data\IDataService.cs" />
     <Compile Include="Models\IDSource.cs" />
-    <Compile Include="Models\NameList.cs" />
+    <Compile Include="Models\IDSourceList.cs" />
     <Compile Include="MVVM\ViewModelBase.cs" />
-    <Compile Include="Utilities\CtsDataService.cs" />
-    <Compile Include="Utilities\NotifierBase.cs" />
+    <Compile Include="Data\CtsDataService.cs" />
+    <Compile Include="MVVM\NotifierBase.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
@@ -144,7 +145,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CtsRestClient\CTSRest.csproj">
+      <Project>{3f2313c1-7939-4447-858a-6afcda961b4c}</Project>
+      <Name>CTSRest</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Media\carbon-mesh-land.png" />
   </ItemGroup>
@@ -154,12 +160,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CtsRestClient\CTSRest.csproj">
-      <Project>{3f2313c1-7939-4447-858a-6afcda961b4c}</Project>
-      <Name>CTSRest</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,7 +12,7 @@ using System;
 
 namespace Fiehnlab.CTSDesktop.ViewModels {
     internal class SplashViewModel : ViewModelBase {
-		private IDataSource ctsClient = new IDataSource();
+		private CtsRestClient ctsClient = new CtsRestClient();
 		private BackgroundWorker bgLoad = new BackgroundWorker();
 
         private List<string> fromValues;
