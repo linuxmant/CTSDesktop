@@ -139,8 +139,7 @@
                         <ListBox x:Name="ToValues" MaxHeight="150" MinHeight="25"
                                  ItemsSource="{Binding ToValuesList}"
                                  SelectionMode="Multiple"
-                                 ToolTip="Select destination IDs" 
-                                 SelectionChanged="ToValues_SelectionChanged">
+                                 ToolTip="Select destination IDs">
                             <!--<ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="2" Orientation="Horizontal" Background="White">
@@ -153,13 +152,17 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>-->
 
-                            <!--<i:Interaction.Triggers>
+                            <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding UpdateSelectedTo}" 
+                                    <i:InvokeCommandAction Command="{Binding UpdateCurrentTo, 
+                                                                    Mode=TwoWay, 
+                                                                    NotifyOnSourceUpdated=True, 
+                                                                    NotifyOnTargetUpdated=True, 
+                                                                    UpdateSourceTrigger=PropertyChanged}" 
                                                            CommandParameter="{Binding ToValues}"/>
                                     <ei:ChangePropertyAction PropertyName="Text" TargetName="Keywords"/>
                                 </i:EventTrigger>
-                            </i:Interaction.Triggers>-->
+                            </i:Interaction.Triggers>
                         </ListBox>
                     </StackPanel>
                 </Grid>

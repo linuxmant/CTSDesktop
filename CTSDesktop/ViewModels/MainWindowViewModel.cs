@@ -39,24 +39,24 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 
 		#region BackgroundWorker definition
 		private void loadToValues(object sender, DoWorkEventArgs args) {
-			Stopwatch timer = new Stopwatch();
-			timer.Start();
-			ToValuesList = dataSource.GetToIDSources();
-			timer.Stop();
+			//Stopwatch timer = new Stopwatch();
+			//timer.Start();
+			//ToValuesList = dataSource.GetToIDSources();
+			//timer.Stop();
 
 			//check 'InChiKey' by default
 			//ToValuesList.Select(i => i.Name == "InChIKey");
 		}
 
 		private void loadFromValues(object sender, DoWorkEventArgs args) {
-			Stopwatch timer = new Stopwatch();
-			timer.Start();
-			FromValuesList = dataSource.GetFromIDSources();
-			timer.Stop();
+			//Stopwatch timer = new Stopwatch();
+			//timer.Start();
+			//FromValuesList = dataSource.GetFromIDSources();
+			//timer.Stop();
 
 			//select 'chemical name' by default
 			//CurrentFrom = FromValuesList.Find( e => e.Name.ToLower() == "chemical name");
-			CurrentFrom = "Chemical Name";
+			//CurrentFrom = "Chemical Name";
 		}
 		#endregion
 
@@ -166,12 +166,12 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 			}
 		}
 
-		private DelegateCommand<ListBox> updateSelectedTo;
-		public DelegateCommand<ListBox> UpdateSelectedTo
+		private DelegateCommand<ListBox> updateCurrentTo;
+		public DelegateCommand<ListBox> UpdateCurrentTo
 		{
 			get
 			{
-				return updateSelectedTo ?? (updateSelectedTo = new DelegateCommand<ListBox>(s => {
+				return updateCurrentTo ?? (updateCurrentTo = new DelegateCommand<ListBox>(s => {
 				MessageBox.Show("Updating selectedTo, " + s.GetType().Name);
 					if (s != null)
 					{

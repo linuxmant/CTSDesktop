@@ -17,18 +17,18 @@ namespace Fiehnlab.CTSDesktop.Views
         public MainWindow() {
             InitializeComponent();
 
-			MainWindowViewModel mwvm;
-			if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-			{
-				MessageBox.Show("InDesign");
-				mwvm = new MainWindowViewModel(new DesignDataServiceImpl());
-			}
-			else
-			{
-				mwvm = new MainWindowViewModel(new CtsDataService());
-			}
+			//MainWindowViewModel mwvm;
+			//if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+			//{
+			//	MessageBox.Show("InDesign");
+			//	mwvm = new MainWindowViewModel(new DesignDataServiceImpl());
+			//}
+			//else
+			//{
+			//	mwvm = new MainWindowViewModel(new CtsDataService());
+			//}
 
-			DataContext = mwvm;
+			//DataContext = mwvm;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

@@ -1,4 +1,4 @@
-﻿<UserControl x:Name="Splash" x:Class="Fiehnlab.CTSDesktop.Views.SplashView"
+﻿<Window x:Name="Splash" x:Class="Fiehnlab.CTSDesktop.Views.SplashView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,11 +8,10 @@
         mc:Ignorable="d"
         Height="400" Width="600" 
         VerticalAlignment="Center"
-        HorizontalAlignment="Center"
-        DataContext="SplashViewModel">
-    <UserControl.Background>
+        HorizontalAlignment="Center" MaxWidth="600" MaxHeight="400">
+    <Window.Background>
         <ImageBrush ImageSource="../Media/carbon-mesh-land.png"/>
-    </UserControl.Background>
+    </Window.Background>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadIdNameValuesCommand}"/>
@@ -49,4 +48,4 @@
                    Background="Transparent"/>
         </StackPanel>
     </DockPanel>
-</UserControl>
+</Window>
