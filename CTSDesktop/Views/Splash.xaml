@@ -8,7 +8,11 @@
         mc:Ignorable="d"
         Height="400" Width="600" 
         VerticalAlignment="Center"
-        HorizontalAlignment="Center" MaxWidth="600" MaxHeight="400">
+        HorizontalAlignment="Center" 
+        MaxWidth="600" MaxHeight="400" 
+        WindowStartupLocation="CenterScreen" 
+        ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="None" Topmost="True"
+        DataContext="SplashViewModel">
     <Window.Background>
         <ImageBrush ImageSource="../Media/carbon-mesh-land.png"/>
     </Window.Background>
@@ -25,27 +29,23 @@
                Foreground="#FFB0B0B0"
                FontFamily="Californian FB" 
                Background="Transparent">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Clicked">
-                        <i:InvokeCommandAction Command="{Binding ShowMessageCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-
             </Label>
             <Label Name="Version"
-               Content="{Binding Version, FallbackValue='Version 0.0.1'}"
+               Content="{Binding AppVersion, FallbackValue='Version 0.0.0'}"
                FontSize="14"
                VerticalAlignment="Top"
                Foreground="#FFB0B0B0"
-               Background="Transparent"/>
+               Background="Transparent">
+            </Label>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Margin="10" VerticalAlignment="Bottom">
             <Label Name="Status"
-                   Content="{Binding Status, FallbackValue='Initializing...'}"
+                   Content="{Binding Status, FallbackValue='...'}"
                    FontSize="14"
                    VerticalAlignment="Bottom"
                    Foreground="#FFB0B0B0"
-                   Background="Transparent"/>
+                   Background="Transparent">
+            </Label>
         </StackPanel>
     </DockPanel>
 </Window>

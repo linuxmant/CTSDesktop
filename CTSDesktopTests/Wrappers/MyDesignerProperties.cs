@@ -12,7 +12,7 @@
 		public bool IsInDesignMode
 		{
 			get { return isInDesignMode; }
-			set { IsInDesignMode = value; }
+			set { isInDesignMode = value; }
 		}
 	}
 }

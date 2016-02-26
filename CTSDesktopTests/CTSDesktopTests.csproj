@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -56,20 +57,24 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="IDesignerProperties.cs" />
-    <Compile Include="MainViewModelTests.cs" />
-    <Compile Include="MyDesignerProperties.cs" />
+    <Compile Include="MVVM\ObservableObjectTests.cs" />
+    <Compile Include="MVVM\ViewModelBaseTests.cs" />
+    <Compile Include="Wrappers\IDesignerProperties.cs" />
+    <Compile Include="ViewModels\MainViewModelTests.cs" />
+    <Compile Include="Wrappers\MyDesignerProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\CoreMVVM\CoreMVVM.csproj">
+      <Project>{b4914382-9a41-4b53-8baa-25e10db2d253}</Project>
+      <Name>CoreMVVM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CTSDesktop\CTSDesktop.csproj">
       <Project>{19849a67-d010-4eef-9b98-bd8b44d18c1f}</Project>
       <Name>CTSDesktop</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

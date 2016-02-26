@@ -10,10 +10,10 @@ namespace Fiehnlab.CTSDesktop.Views
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window {
+	public partial class MainWindow2 : Window {
         private bool isClosing = false;
 
-        public MainWindow() {
+        public MainWindow2() {
             InitializeComponent();
 
 			MainWindowViewModel mwvm;

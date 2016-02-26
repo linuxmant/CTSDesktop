@@ -21,19 +21,5 @@ namespace Fiehnlab.CTSDesktop.Tests
 		//	var ds = new DesignDataServiceImpl();
 		//}
 
-		[TestMethod]
-		public void IdNamesShouldContainDesignItemsAfterClassCreationWithoutParams()
-		{
-			var viewModel = new MainWindowViewModel();
-			Thread.Sleep(1000);
-
-			Assert.IsTrue(viewModel.ToValuesList.Count > 0);
-			CollectionAssert.AllItemsAreInstancesOfType(viewModel.ToValuesList, typeof(string));
-			Thread.Sleep(1000);
-
-			Assert.IsTrue(viewModel.FromValuesList.Count > 0);
-			CollectionAssert.AllItemsAreInstancesOfType(viewModel.FromValuesList, typeof(string));
-		}
-
 	}
 }

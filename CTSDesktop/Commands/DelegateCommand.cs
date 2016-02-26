@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Input;
 
@@ -59,7 +60,7 @@ namespace Fiehnlab.CTSDesktop.Commands {
 		[DebuggerStepThrough]
 		public bool CanExecute(object parameter)
 		{
-			return canExecute == null ? true : canExecute((T)parameter);
+			return parameter == null ? true : canExecute((T)parameter);
 		}
 
 		public void Execute(object parameter)

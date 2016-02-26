@@ -2,10 +2,10 @@
 
 namespace Fiehnlab.CTSDesktop.Models
 {
-	public class IDSource : ViewModelBase {
+	public class IDSource : ObservableObject {
 
 		private string name;
-		private bool selected;
+		private bool isSelected;
 
 		/// <summary>
 		/// Creates a new instance of an External Id object
@@ -13,7 +13,7 @@ namespace Fiehnlab.CTSDesktop.Models
 		public IDSource(string name, bool v = false)
 		{
 			Name = name;
-			Selected = v;
+			IsSelected = v;
 		}
 
 		public string Name
@@ -24,15 +24,19 @@ namespace Fiehnlab.CTSDesktop.Models
 			}
 		}
 
-		public bool Selected
+		public bool IsSelected
 		{
-			get { return selected; }
+			get { return isSelected; }
 			set
 			{
-				selected = value;
+				isSelected = value;
 				NotifyPropertyChanged();
 			}
 		}
 
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

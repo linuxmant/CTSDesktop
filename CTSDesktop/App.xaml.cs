@@ -5,6 +5,7 @@ using Fiehnlab.CTSRest;
 using System.Diagnostics;
 using Fiehnlab.CTSDesktop.ViewModels;
 using System.Threading;
+using Fiehnlab.CTSDesktop.Models;
 
 namespace Fiehnlab.CTSDesktop
 {
@@ -20,23 +21,63 @@ namespace Fiehnlab.CTSDesktop
 
             Stopwatch timer = new Stopwatch();
             SplashView splash = new SplashView();
-            MainWindow window = new MainWindow();
-            MainWindowViewModel mv = window.DataContext as MainWindowViewModel;
+			SplashViewModel svm = (SplashViewModel) splash.DataContext;
 
-            timer.Start();
-            CtsRestClient cli = new CtsRestClient();
-            splash.ShowDialog();
-            var from = cli.GetFromValues();
-            var to = cli.GetToValues();
+			try
+			{
+				// sets main window to 75% of screen size
+				MeasureScreenAndSetMainWindowDimensions();
 
-            long diff = SPLASH_TIME - timer.ElapsedMilliseconds;
-            if (diff > 0) {
-                Thread.Sleep((int)diff);
-            }
-            timer.Stop();
-            splash.Close();
+				splash.Show();
+				timer.Start();
 
-            window.ShowDialog();
+				svm.Status = "Initializing...";
+				MainWindow2 window = new MainWindow2();
+				MainWindowViewModel mv = (MainWindowViewModel)window.DataContext;
+
+				// load From values and select default 'Chemical Name'
+				mv.FromValuesList =  svm.GetFromValues();
+				mv.CurrentFrom = "Chemical Name";
+
+				// load To values and select default 'InChIKey'
+				mv.ToValuesList = svm.GetToValues();
+
+				var inchikey = mv.ToValuesList.Find(obj => obj.Name == "InChIKey");
+				inchikey.IsSelected = true;
+				mv.CurrentTo.Add(inchikey);
+
+				// create main window and 
+				window.DataContext = mv;
+
+				var lap = timer.ElapsedMilliseconds;
+				while ( lap < SPLASH_TIME)
+				{
+					Thread.Sleep(10);
+					lap = timer.ElapsedMilliseconds;
+				}
+
+				timer.Stop();
+
+				window.Show();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
+			finally
+			{
+				splash.Close();
+			}
+		}
+
+		private void MeasureScreenAndSetMainWindowDimensions()
+		{
+			double height = SystemParameters.MaximizedPrimaryScreenHeight;
+			double width = SystemParameters.MaximizedPrimaryScreenWidth;
+
+			MainWindow.Height = height * 0.75;
+			MainWindow.Width = width * 0.75;
 		}
 	}
 }

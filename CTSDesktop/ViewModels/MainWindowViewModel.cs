@@ -2,15 +2,15 @@
 using System;
 using System.Linq;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Data;
 using System.Globalization;
-using System.Windows.Controls;
 using Fiehnlab.CTSDesktop.Design;
 using Fiehnlab.CTSDesktop.Data;
 using Fiehnlab.CTSDesktop.MVVM;
 using Fiehnlab.CTSDesktop.Commands;
 using System.Collections.Generic;
+using Fiehnlab.CTSDesktop.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fiehnlab.CTSDesktop.ViewModels
 {
@@ -18,53 +18,50 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 
 		private bool isClosing = false;
 		private string currentStep = "home";
-		//private BackgroundWorker bgWorker;
 		private IDataService dataSource;
-
-		public MainWindowViewModel() : this(new DesignDataServiceImpl()) {}
 
 		public MainWindowViewModel(IDataService ds) {
 			dataSource = ds;
-			LoadIdNameValues();
+
+			FromValuesList = new List<string>(dataSource.GetFromIDSources());
+
+			foreach (var item in dataSource.GetToIDSources())
+			{
+				ToValuesList.Add(new IDSource(item));
+			}
 		}
 
-		internal void LoadIdNameValues()
-		{
-			BackgroundWorker bgWorker;
-			bgWorker = new BackgroundWorker();
-			bgWorker.DoWork += new DoWorkEventHandler((s, args) => loadToValues(s, args));
-			bgWorker.DoWork += new DoWorkEventHandler((s, args) => loadFromValues(s, args));
-			bgWorker.RunWorkerAsync();
-		}
-
-		#region BackgroundWorker definition
-		private void loadToValues(object sender, DoWorkEventArgs args) {
-			//Stopwatch timer = new Stopwatch();
-			//timer.Start();
-			//ToValuesList = dataSource.GetToIDSources();
-			//timer.Stop();
-
-			//check 'InChiKey' by default
-			//ToValuesList.Select(i => i.Name == "InChIKey");
-		}
-
-		private void loadFromValues(object sender, DoWorkEventArgs args) {
-			//Stopwatch timer = new Stopwatch();
-			//timer.Start();
-			//FromValuesList = dataSource.GetFromIDSources();
-			//timer.Stop();
-
-			//select 'chemical name' by default
-			//CurrentFrom = FromValuesList.Find( e => e.Name.ToLower() == "chemical name");
-			//CurrentFrom = "Chemical Name";
-		}
-		#endregion
-
-		#region Properties
+		#region Member variables
 		/// <summary>
 		/// Available types of values to convert from
 		/// </summary>
 		private List<string> fromValuesList;
+
+		/// <summary>
+		/// Available types of values to convert to
+		/// </summary>
+		private List<IDSource> toValuesList;
+
+		/// <summary>
+		/// This contains the type of value to convert from
+		/// </summary>
+		private string currentFrom;
+
+		/// <summary>
+		/// This contains a list of types of values to convert to.
+		/// </summary>
+		private HashSet<IDSource> currentTo;
+
+		private DelegateCommand<Window> closeCommand;
+		private DelegateCommand convertCommand;
+		private DelegateCommand updateCurrentFromCommand;
+		private DelegateCommand updateCurrentToCommand;
+		private DelegateCommand<string> parseTextCommand;
+		private string keywords;
+		private int convertItemCount = 0;
+		#endregion
+
+		#region Properties
 		/// <summary>
 		/// FromValuesList property accessors
 		/// </summary>
@@ -79,15 +76,11 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 		}
 
 		/// <summary>
-		/// Available types of values to convert to
-		/// </summary>
-		private List<string> toValuesList;
-		/// <summary>
 		/// ToValuesList property accessors
 		/// </summary>
-		public List<string> ToValuesList
+		public List<IDSource> ToValuesList
 		{
-			get { return toValuesList ?? (toValuesList = new List<string>()); }
+			get { return toValuesList ?? (toValuesList = new List<IDSource>()); }
 			set
 			{
 				this.toValuesList = value;
@@ -96,12 +89,9 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 		}
 
 		/// <summary>
-		/// This contains the type of value to convert from
-		/// </summary>
-		private string currentFrom;
-		/// <summary>
 		/// CurrentFrom property accessors
 		/// </summary>
+		[Required]
 		public string CurrentFrom
 		{
 			get { return currentFrom ?? (currentFrom = ""); }
@@ -113,15 +103,12 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 		}
 
 		/// <summary>
-		/// This contains a list of types of values to convert to.
-		/// </summary>
-		private List<string> currentTo;
-		/// <summary>
 		/// CurrentTo property accessors
 		/// </summary>
-		public List<string> CurrentTo
+		[Required]
+		public HashSet<IDSource> CurrentTo
 		{
-			get { return currentTo ?? (currentTo = new List<string>()); }
+			get { return currentTo ?? (currentTo = new HashSet<IDSource>()); }
 			set
 			{
 				currentTo = value;
@@ -129,64 +116,125 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Holds the Keywords to be conveted
+		/// </summary>
+		[Required]
+		[MinLength(3, ErrorMessage = "Too few characters for a keyword")]
+		[MaxLength(1000, ErrorMessage = "Can't search that many keywords")]
+		public string Keywords {
+			get { return keywords; }
+			set {
+				keywords = value;
+				NotifyPropertyChanged();
+			}
+		}
+
+		public int ConvertItemCount
+		{
+			get { return convertItemCount; }
+			set
+			{
+				convertItemCount = value;
+				NotifyPropertyChanged();
+			}
+		}
 		#endregion
 
 		#region Commands
-		private DelegateCommand loadIdNamesCommand;
-		public DelegateCommand LoadIdNamesCommand
+		public DelegateCommand<Window> CloseCommand
+		{
+			get { return closeCommand ?? (closeCommand = new DelegateCommand<Window>(wnd => CloseWindow(wnd), wnd => CanCloseWindow(wnd))); }
+		}
+
+		public DelegateCommand ConvertCommand
+		{
+			get { return convertCommand ?? (convertCommand = new DelegateCommand(showConvertionData, CanExecuteConvertCommand)); }
+		}
+
+		public DelegateCommand UpdateCurrentFromCommand
 		{
 			get
 			{
-				return loadIdNamesCommand ?? (loadIdNamesCommand = new DelegateCommand(s => LoadIdNameValues(), p => true));
+				if (updateCurrentFromCommand == null)
+				{
+					updateCurrentFromCommand = new DelegateCommand(UpdateCurrentFrom, CanUpdateCurrentFrom);
+				}
+				return updateCurrentFromCommand;
 			}
 		}
 
-		private DelegateCommand<Window> closeCommand;
-        public DelegateCommand<Window> CloseCommand
-        {
-            get { return closeCommand ?? (closeCommand = new DelegateCommand<Window>(wnd => CloseWindow(wnd), wnd => CanCloseWindow(wnd))); }
-		}
-
-        private DelegateCommand convertCommand;
-        public DelegateCommand ConvertCommand
-        {
-            get { return convertCommand ?? (convertCommand = new DelegateCommand(s => MessageBox.Show("From: " + CurrentFrom + "\nTo: " + String.Join(", ", CurrentTo), "Converting:"))); }
-		}
-
-
-
-		private DelegateCommand updateFrom;
-		public DelegateCommand UpdateFrom
+		public DelegateCommand UpdateCurrentToCommand
 		{
 			get
 			{
-				return updateFrom ?? (updateFrom = new DelegateCommand(s => {
-					MessageBox.Show(s != null ? s.ToString() : "i dont know what this is");
-				}));
+				if (updateCurrentToCommand == null)
+				{
+					updateCurrentToCommand = new DelegateCommand(UpdateCurrentTo, CanUpdateCurrentTo);
+				}
+				return updateCurrentToCommand;
 			}
 		}
 
-		private DelegateCommand<ListBox> updateCurrentTo;
-		public DelegateCommand<ListBox> UpdateCurrentTo
+		public DelegateCommand<string> ParseTextCommand
 		{
 			get
 			{
-				return updateCurrentTo ?? (updateCurrentTo = new DelegateCommand<ListBox>(s => {
-				MessageBox.Show("Updating selectedTo, " + s.GetType().Name);
-					if (s != null)
-					{
-						foreach (ListBoxItem item in s.Items)
-						{
-							if (item.IsSelected)
-								CurrentTo.Add(item.Content.ToString());
-							else
-								CurrentTo.Where(p => item.Content == p);
-						}
-					}
-				}));
+				if(parseTextCommand == null)
+				{
+					parseTextCommand = new DelegateCommand<string>(ParseText, CanParseText);
+				}
+
+				return parseTextCommand;
 			}
 		}
 		#endregion
+
+		internal void ParseText(string textToParse)
+		{
+			ConvertItemCount = textToParse.Split('\n').Length;
+		}
+
+		internal bool CanParseText(object p)
+		{
+			return Keywords.Length > 0;
+		}
+
+		internal void UpdateCurrentFrom(object s)
+		{
+		}
+
+		internal void UpdateCurrentTo(object s)
+		{
+			System.Collections.IList items = (System.Collections.IList)s;
+			var collection = items.Cast<IDSource>();
+
+			CurrentTo.Clear();
+			foreach(var item in collection)
+			{
+				CurrentTo.Add(item);
+			}
+		}
+
+		internal void showConvertionData(object s)
+		{
+			MessageBox.Show("From: " + CurrentFrom + "\nTo: " + String.Join(", ", CurrentTo) + "\nKeywords:\n\t" + string.Join("\n\t", Keywords), "Conversion Info", MessageBoxButton.OK, MessageBoxImage.Information);
+		}
+
+		internal bool CanExecuteConvertCommand(object p)
+		{
+			return (CurrentTo.Count > 0 && OnValidate(Keywords) == null );
+		}
+
+		internal bool CanUpdateCurrentFrom(object p)
+		{
+			return FromValuesList.Count > 0;
+		}
+
+		internal bool CanUpdateCurrentTo(object p)
+		{
+			return ToValuesList.Count > 0;
+		}
 
 		internal void CloseWindow(Window window)
 		{
@@ -204,6 +252,11 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 			return !isClosing;
 		}
 
+		internal void ParseTextInput(string text)
+		{
+			MessageBox.Show(text??"no text");
+		}
+
 		#region ValueConverters
 		public class ItemNumberConverter : IValueConverter {
 			public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
@@ -215,5 +268,6 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 			}
 		}
 		#endregion
+
 	}
 }

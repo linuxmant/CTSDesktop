@@ -57,6 +57,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
@@ -84,19 +85,23 @@
     <Compile Include="Design\DesignDataSourceImpl.cs" />
     <Compile Include="Data\IDataService.cs" />
     <Compile Include="Models\IDSource.cs" />
-    <Compile Include="Models\IDSourceList.cs" />
-    <Compile Include="MVVM\ViewModelBase.cs" />
     <Compile Include="Data\CtsDataService.cs" />
-    <Compile Include="MVVM\NotifierBase.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow2.xaml.cs">
+      <DependentUpon>MainWindow2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\MainWindow2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -146,6 +151,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreMVVM\CoreMVVM.csproj">
+      <Project>{b4914382-9a41-4b53-8baa-25e10db2d253}</Project>
+      <Name>CoreMVVM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CtsRestClient\CTSRest.csproj">
       <Project>{3f2313c1-7939-4447-858a-6afcda961b4c}</Project>
       <Name>CTSRest</Name>

@@ -1,10 +1,10 @@
 ﻿using Fiehnlab.CTSDesktop.Data;
-using Fiehnlab.CTSDesktop.Models;
+using Fiehnlab.CTSDesktop.MVVM;
 using System.Collections.Generic;
 
 namespace Fiehnlab.CTSDesktop.Design
 {
-	public class DesignDataServiceImpl : IDataService
+	public class DesignDataServiceImpl : ObservableObject, IDataService
 	{
 		public List<string> GetToIDSources()
 		{
