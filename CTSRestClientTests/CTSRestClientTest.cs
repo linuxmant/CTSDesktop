@@ -32,7 +32,7 @@ namespace Fiehnlab.CTSRestTests {
 			var client = new CtsRestClient();
 
 			List<string> idNames = new List<string>();
-			idNames = client.GetToValues();
+			idNames = client.GetIdNames();
 
 			var res = idNames.GetRange(0, 15);
 
@@ -49,26 +49,12 @@ namespace Fiehnlab.CTSRestTests {
 			var client = new CtsRestClient();
 
 			List<string> idNames = new List<string>();
-			idNames = client.GetFromValues();
+			idNames = client.GetIdNames(true);
 
 			var res = idNames.GetRange(0, 14);
 
 			List<string> exp = top15;
-			exp.Remove(Fiehnlab.CTSRest.Properties.Resources.INCHI_CODE);
-
-			//for(int i =0; i < 15; i++) {
-			//	string a = "", b = "";
-
-			//	if(i==14) {
-			//		a = res[i];
-			//		b ="---";
-			//	} else {
-			//		a = res[i];
-			//		b = exp[i];
-			//	}
-
-			//	Console.WriteLine("{0}\t{1}", a, b);
-			//}
+			exp.Remove(CTSRest.Properties.Resources.INCHI_CODE);
 
 			Assert.IsNotNull(idNames);
 			Assert.IsTrue(idNames.Count > 0);

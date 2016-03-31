@@ -1,4 +1,5 @@
 ﻿using Fiehnlab.CTSDesktop.Data;
+using Fiehnlab.CTSDesktop.Models;
 using Fiehnlab.CTSDesktop.MVVM;
 using System.Collections.Generic;
 
@@ -6,21 +7,21 @@ namespace Fiehnlab.CTSDesktop.Design
 {
 	public class DesignDataServiceImpl : ObservableObject, IDataService
 	{
-		public List<string> GetToIDSources()
+		public List<IDSource> GetToNames()
 		{
-			List<string> names = new List<string>();
+			List<IDSource> names = new List<IDSource>();
 
 			for (int i = 0; i < 10; i++)
 			{
-				names.Add(string.Format("test {0}", i));
+				names.Add(new IDSource(string.Format("test {0}", i)));
 			}
 
-			return new List<string>(names);
+			return new List<IDSource>(names);
 		}
 
-		public List<string> GetFromIDSources()
+		public List<IDSource> GetFromNames()
 		{
-			return GetToIDSources();
+			return GetToNames();
 		}
 	}
 }

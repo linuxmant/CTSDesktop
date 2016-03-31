@@ -25,7 +25,7 @@ namespace Fiehnlab.CTSDesktop.Views
 			else
 			{
 				Debug.WriteLine("Runtime - creating real data source");
-				mwvm = new MainWindowViewModel(new CtsDataService());
+				mwvm = new MainWindowViewModel(new CtsDataServiceClient());
 			}
 
 			DataContext = mwvm;

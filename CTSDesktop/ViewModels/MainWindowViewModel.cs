@@ -1,36 +1,34 @@
 ﻿using System.Windows;
 using System;
 using System.Linq;
-using System.ComponentModel;
 using System.Windows.Data;
 using System.Globalization;
-using Fiehnlab.CTSDesktop.Design;
 using Fiehnlab.CTSDesktop.Data;
 using Fiehnlab.CTSDesktop.MVVM;
 using Fiehnlab.CTSDesktop.Commands;
 using System.Collections.Generic;
 using Fiehnlab.CTSDesktop.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
-namespace Fiehnlab.CTSDesktop.ViewModels
-{
-	public class MainWindowViewModel : ViewModelBase {
+namespace Fiehnlab.CTSDesktop.ViewModels {
+    public class MainWindowViewModel : ViewModelBase {
 
 		private bool isClosing = false;
 		private string currentStep = "home";
-		private IDataService dataSource;
+		private CtsDataServiceClient dataSource;
 
-		public MainWindowViewModel(IDataService ds) {
+		public MainWindowViewModel(CtsDataServiceClient ds) {
 			dataSource = ds;
 
-			FromValuesList = new List<string>(dataSource.GetFromIDSources());
+            FromValuesList = fillFromValues();
 
-			foreach (var item in dataSource.GetToIDSources())
-			{
-				ToValuesList.Add(new IDSource(item));
-			}
+            Task tn = dataSource.GetToNames();
+            tn.ContinueWith<List<string>>(fillToValues);
+            tn.Start();
+
 		}
-
+        
 		#region Member variables
 		/// <summary>
 		/// Available types of values to convert from
@@ -215,6 +213,16 @@ namespace Fiehnlab.CTSDesktop.ViewModels
 				CurrentTo.Add(item);
 			}
 		}
+
+        private List<string> fillFromValues() {
+            return dataSource.GetFromNames();
+        }
+
+        private void fillToValues(Task task) {
+            foreach (IDSource item in task.Wait()) {
+                ToValuesList.Add(item);
+            }
+        }
 
 		internal void showConvertionData(object s)
 		{

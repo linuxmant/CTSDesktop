@@ -7,9 +7,9 @@
     <ProjectGuid>{B4914382-9A41-4B53-8BAA-25E10DB2D253}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoreMVVM</RootNamespace>
+    <RootNamespace>Fiehnlab.CTSDesktop</RootNamespace>
     <AssemblyName>CoreMVVM</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>

@@ -8,8 +8,7 @@ using System.Windows.Documents;
 
 namespace Fiehnlab.CTSDesktop.Data
 {
-	public class CtsDataServiceClient : ObservableObject
-	{
+	public class CtsDataServiceClient : ObservableObject {
         private HttpClient client;
         private const string CTS_URL = "http://cts.fiehnlab.ucdavis.edu";
         private string TO_NAMES_QUERY_PATH = "/service/conversion/toValues";
@@ -26,6 +25,10 @@ namespace Fiehnlab.CTSDesktop.Data
             return fetchNames(TO_NAMES_QUERY_PATH);
         }
 
+        public Task<List<string>> GetFromNames() {
+            return fetchNames(FROM_NAMES_QUERY_PATH);
+        }
+
         #region Constructor
         public CtsDataServiceClient() {
             client = new HttpClient();
@@ -37,7 +40,7 @@ namespace Fiehnlab.CTSDesktop.Data
             string res = "";
             using (HttpResponseMessage response = await client.GetAsync(path))
             using (HttpContent content = response.Content) {
-                res = content.ReadAsStringAsync();
+                res = await content.ReadAsStringAsync();
 
                 Console.WriteLine(res);
             }

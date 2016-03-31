@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using RestSharp;
 using System.Diagnostics;
+using System;
 
 namespace Fiehnlab.CTSRest
 {
-	public class CtsRestClient {
+	public class CtsRestClient : ICtsRestClient {
 
 		private RestClient client;
 
@@ -21,7 +22,7 @@ namespace Fiehnlab.CTSRest
 			set { this.client = value; }
 		}
 
-		internal List<string> getIdNames(bool from = false) {
+		public List<string> GetIdNames(bool from = false) {
 			List<string> names = new List<string>();
 
 			RestRequest request = new RestRequest(Properties.Resources.CTS_REST_PATH + "/" + Properties.Resources.CTS_REST_IDNAMES_PATH, Method.GET);
@@ -60,12 +61,8 @@ namespace Fiehnlab.CTSRest
 			return names;
 		}
 
-		public List<string> GetFromValues() {
-			return getIdNames(true);
-		}
-
-		public List<string> GetToValues() {
-			return getIdNames();
+		public List<string> Convert(List<string> from, List<string> to, List<string> keywords) {
+            throw new NotImplementedException();
 		}
 	}
 

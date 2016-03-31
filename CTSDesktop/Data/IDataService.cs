@@ -5,7 +5,7 @@ namespace Fiehnlab.CTSDesktop.Data
 {
 	public interface IDataService
 	{
-		List<string> GetToIDSources();
-		List<string> GetFromIDSources();
+		List<IDSource> GetToNames();
+		List<IDSource> GetFromNames();
 	}
 }
