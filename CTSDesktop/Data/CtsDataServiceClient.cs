@@ -5,52 +5,33 @@ using System.Net.Http;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using Fiehnlab.CTSDesktop.Models;
+using System.Windows;
 
 namespace Fiehnlab.CTSDesktop.Data
 {
-	public class CtsDataServiceClient : ObservableObject {
-        private HttpClient client;
-        private const string CTS_URL = "http://cts.fiehnlab.ucdavis.edu";
-        private string TO_NAMES_QUERY_PATH = "/service/conversion/toValues";
-        private string FROM_NAMES_QUERY_PATH = "/service/conversion/fromValues";
+    public class CtsDataServiceClient : ObservableObject//, IDataService 
+    {
+        ICtsRestClient client;
 
-        #region Fields
-
-        private List<string> toNames;
-        private List<string> fromNames;
-
-        #endregion
-
-        public Task<List<string>> GetToNames() {
-            return fetchNames(TO_NAMES_QUERY_PATH);
+        public CtsDataServiceClient(ICtsRestClient cli) {
+            client = cli;
         }
 
-        public Task<List<string>> GetFromNames() {
-            return fetchNames(FROM_NAMES_QUERY_PATH);
-        }
+        //public List<IDSource> GetFromNames() {
+        //    List<IDSource> list = new List<IDSource>();
+        //    Task t = client.GetIdNames(true);
+        //    try {
+        //        t.Wait();
+                
+        //    } catch(AggregateException ex) {
+        //        MessageBox.Show("Error getting ID Names");
+        //    }
 
-        #region Constructor
-        public CtsDataServiceClient() {
-            client = new HttpClient();
-            client.BaseAddress = new Uri(CTS_URL);
-        }
-        #endregion
+        //}
 
-        private async Task<List<string>>fetchNames(string path) {
-            string res = "";
-            using (HttpResponseMessage response = await client.GetAsync(path))
-            using (HttpContent content = response.Content) {
-                res = await content.ReadAsStringAsync();
-
-                Console.WriteLine(res);
-            }
-
-            List<string> ls = new List<string>();
-            foreach(var s in res.Split(',')) {
-                ls.Add(s);
-            }
-
-            return ls;
-        }
+        //public List<IDSource> GetToNames() {
+        //    throw new NotImplementedException();
+        //}
     }
 }

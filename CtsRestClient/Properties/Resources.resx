@@ -120,11 +120,11 @@
   <data name="CTS_REST_CONVERSION_PATH" xml:space="preserve">
     <value>convert</value>
   </data>
-  <data name="CTS_REST_IDNAMES_PATH" xml:space="preserve">
-    <value>conversion/toValues</value>
+  <data name="CTS_REST_FROMNAMES_PATH" xml:space="preserve">
+    <value>/service/conversion/fromValues</value>
   </data>
-  <data name="CTS_REST_PATH" xml:space="preserve">
-    <value>service</value>
+  <data name="CTS_REST_TONAMES_PATH" xml:space="preserve">
+    <value>/service/conversion/toValues</value>
   </data>
   <data name="CTS_URL" xml:space="preserve">
     <value>http://cts.fiehnlab.ucdavis.edu</value>

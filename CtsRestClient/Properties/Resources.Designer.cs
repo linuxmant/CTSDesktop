@@ -70,20 +70,20 @@ namespace Fiehnlab.CTSRest.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to conversion/toValues.
+        ///   Looks up a localized string similar to /service/conversion/fromValues.
         /// </summary>
-        public static string CTS_REST_IDNAMES_PATH {
+        public static string CTS_REST_FROMNAMES_PATH {
             get {
-                return ResourceManager.GetString("CTS_REST_IDNAMES_PATH", resourceCulture);
+                return ResourceManager.GetString("CTS_REST_FROMNAMES_PATH", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to service.
+        ///   Looks up a localized string similar to /service/conversion/toValues.
         /// </summary>
-        public static string CTS_REST_PATH {
+        public static string CTS_REST_TONAMES_PATH {
             get {
-                return ResourceManager.GetString("CTS_REST_PATH", resourceCulture);
+                return ResourceManager.GetString("CTS_REST_TONAMES_PATH", resourceCulture);
             }
         }
         

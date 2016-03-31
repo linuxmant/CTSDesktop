@@ -1,69 +1,64 @@
 ﻿using System.Collections.Generic;
-using RestSharp;
-using System.Diagnostics;
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace Fiehnlab.CTSRest
-{
-	public class CtsRestClient : ICtsRestClient {
+namespace Fiehnlab.CTSRest {
+    public class CtsRestClient : ICtsRestClient
+    {
+		//private RestClient client;
+        private HttpClient client;
+        private List<string> nameList = new List<string>();
 
-		private RestClient client;
-
-		/// <summary>
-		/// Creates a new REST client to call the CTS
-		/// </summary>
-		public CtsRestClient() {
-			Client = new RestClient( Properties.Resources.CTS_URL);
+        /// <summary>
+        /// Creates a new REST client to call the CTS
+        /// </summary>
+        public CtsRestClient() {
+			Client = new HttpClient();
+            Client.BaseAddress = new Uri(Properties.Resources.CTS_URL);
+            //Client.DefaultRequestHeaders.Add("Content-Type", Properties.Resources.HEADERS_JSON);
 		}
 
-		internal RestClient Client
-		{
-			get { return this.client; }
+        //internal RestClient Client
+        internal HttpClient Client
+        {
+            get { return this.client; }
 			set { this.client = value; }
-		}
-
-		public List<string> GetIdNames(bool from = false) {
-			List<string> names = new List<string>();
-
-			RestRequest request = new RestRequest(Properties.Resources.CTS_REST_PATH + "/" + Properties.Resources.CTS_REST_IDNAMES_PATH, Method.GET);
-			request.AddHeader("Content-Type", Properties.Resources.HEADERS_JSON);
-
-			RestResponse response = new RestResponse();
-			response = (RestResponse) Client.Execute(request);
-
-			if (response.ResponseStatus.Equals(ResponseStatus.Completed)) {
-				bool save = false;
-				string name = "";
-
-				foreach (char c in response.RawBytes) {
-					if(c == '"') {
-						save = !save;
-					}
-
-					if (save && c != '"') {
-						name += c;
-					} else {
-						if (name != "") {
-							names.Add(name);
-						}
-						name = "";
-					}
-				}
-			} else {
-				Debug.Fail(string.Format("ERROR: {0}", response.ErrorMessage + "\n" + response.ErrorException));
-				return new List<string>();
-			}
-
-			if (from) {
-				names.Remove(Properties.Resources.INCHI_CODE);
-			}
-
-			return names;
 		}
 
 		public List<string> Convert(List<string> from, List<string> to, List<string> keywords) {
             throw new NotImplementedException();
 		}
-	}
 
+        public List<string> GetIdNames(bool from = false) {
+            Console.WriteLine("getting names. from? {0}", from);
+            List<string> names = new List<string>();
+
+            if (from) {
+                names = fetchNames(Properties.Resources.CTS_REST_FROMNAMES_PATH, Client).Result;
+            } else {
+                names = fetchNames(Properties.Resources.CTS_REST_TONAMES_PATH, Client).Result;
+            }
+            //Console.WriteLine("found {0} names", names.Count);
+
+            return names;
+        }
+
+        private async Task<List<string>> fetchNames(string path, HttpClient client) {
+            string res = "";
+            List<string> ls = new List<string>();
+
+            using (HttpResponseMessage response = await client.GetAsync(path))
+            using (HttpContent content = response.Content) {
+                res = await content.ReadAsStringAsync();
+            }
+
+            foreach (var s in res.Split(',')) {
+                ls.Add(s.Replace("[", null).Replace("]", null).Replace("\"", null).Trim());
+            }
+
+            return ls;
+        }
+
+    }
 }

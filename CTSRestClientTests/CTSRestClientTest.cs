@@ -31,12 +31,11 @@ namespace Fiehnlab.CTSRestTests {
 		public void testGetToValues() {
 			var client = new CtsRestClient();
 
-			List<string> idNames = new List<string>();
-			idNames = client.GetIdNames();
-
+			List<string> idNames = client.GetIdNames();
+            Console.WriteLine("idnames: " + idNames.Count);
 			var res = idNames.GetRange(0, 15);
 
-			List<string> exp = top15;
+            List<string> exp = top15;
 
 			Assert.IsNotNull(idNames);
 			Assert.IsTrue(idNames.Count > 0);
@@ -48,8 +47,7 @@ namespace Fiehnlab.CTSRestTests {
 		public void testGetFromValues() {
 			var client = new CtsRestClient();
 
-			List<string> idNames = new List<string>();
-			idNames = client.GetIdNames(true);
+			List<string> idNames = client.GetIdNames(true);
 
 			var res = idNames.GetRange(0, 14);
 

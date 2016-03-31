@@ -16,24 +16,19 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 
 		private bool isClosing = false;
 		private string currentStep = "home";
-		private CtsDataServiceClient dataSource;
+		private IDataService dataSource;
 
-		public MainWindowViewModel(CtsDataServiceClient ds) {
+		public MainWindowViewModel(IDataService ds) {
 			dataSource = ds;
-
             FromValuesList = fillFromValues();
-
-            Task tn = dataSource.GetToNames();
-            tn.ContinueWith<List<string>>(fillToValues);
-            tn.Start();
-
+            ToValuesList = fillToValues();
 		}
         
 		#region Member variables
 		/// <summary>
 		/// Available types of values to convert from
 		/// </summary>
-		private List<string> fromValuesList;
+		private List<IDSource> fromValuesList;
 
 		/// <summary>
 		/// Available types of values to convert to
@@ -63,9 +58,9 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		/// <summary>
 		/// FromValuesList property accessors
 		/// </summary>
-		public List<string> FromValuesList
+		public List<IDSource> FromValuesList
 		{
-			get { return fromValuesList ?? (fromValuesList = new List<string>()); }
+			get { return fromValuesList ?? (fromValuesList = new List<IDSource>()); }
 			set
 			{
 				this.fromValuesList = value;
@@ -186,9 +181,10 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 				return parseTextCommand;
 			}
 		}
-		#endregion
+        #endregion
 
-		internal void ParseText(string textToParse)
+        #region Helper Functions
+        internal void ParseText(string textToParse)
 		{
 			ConvertItemCount = textToParse.Split('\n').Length;
 		}
@@ -214,14 +210,12 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 			}
 		}
 
-        private List<string> fillFromValues() {
+        private List<IDSource> fillFromValues() {
             return dataSource.GetFromNames();
         }
 
-        private void fillToValues(Task task) {
-            foreach (IDSource item in task.Wait()) {
-                ToValuesList.Add(item);
-            }
+        private List<IDSource> fillToValues() {
+            return dataSource.GetToNames();
         }
 
 		internal void showConvertionData(object s)
@@ -264,9 +258,10 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		{
 			MessageBox.Show(text??"no text");
 		}
+        #endregion
 
-		#region ValueConverters
-		public class ItemNumberConverter : IValueConverter {
+        #region ValueConverters
+        public class ItemNumberConverter : IValueConverter {
 			public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 				return String.Format("Items: {0}", value);
 			}

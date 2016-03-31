@@ -36,11 +36,11 @@ namespace Fiehnlab.CTSDesktop
 				MainWindowViewModel mv = (MainWindowViewModel)window.DataContext;
 
 				// load From values and select default 'Chemical Name'
-				mv.FromValuesList =  svm.GetFromValues();
+				mv.FromValuesList =  svm.FromValues;
 				mv.CurrentFrom = "Chemical Name";
 
 				// load To values and select default 'InChIKey'
-				mv.ToValuesList = svm.GetToValues();
+				mv.ToValuesList = svm.ToValues;
 
 				var inchikey = mv.ToValuesList.Find(obj => obj.Name == "InChIKey");
 				inchikey.IsSelected = true;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Fiehnlab.CTSRest {
     public interface ICtsRestClient {

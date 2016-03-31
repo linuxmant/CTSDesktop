@@ -20,15 +20,15 @@ namespace Fiehnlab.CTSDesktop.Views
 			if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
 			{
 				Debug.WriteLine("InDesign - creating fake data source");
-				mwvm = new MainWindowViewModel(new DesignDataServiceImpl());
+				//mwvm = new MainWindowViewModel(new DesignDataServiceImpl());
 			}
 			else
 			{
 				Debug.WriteLine("Runtime - creating real data source");
-				mwvm = new MainWindowViewModel(new CtsDataServiceClient());
+				//mwvm = new MainWindowViewModel(new CtsDataServiceClient());
 			}
 
-			DataContext = mwvm;
+			//DataContext = mwvm;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

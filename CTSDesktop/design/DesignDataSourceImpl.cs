@@ -1,27 +1,41 @@
 ﻿using Fiehnlab.CTSDesktop.Data;
 using Fiehnlab.CTSDesktop.Models;
 using Fiehnlab.CTSDesktop.MVVM;
+using Fiehnlab.CTSRest;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Fiehnlab.CTSDesktop.Design
 {
-	public class DesignDataServiceImpl : ObservableObject, IDataService
+	public class DesignDataServiceImpl : ObservableObject//, ICtsRestClient
 	{
-		public List<IDSource> GetToNames()
+        private List<IDSource> fromValues;
+        private List<IDSource> toValues;
+
+		public async void GetToNames()
 		{
-			List<IDSource> names = new List<IDSource>();
+            await Task.Run(() => {
+                for (int i = 0; i < 10; i++) {
+                    toValues.Add(new IDSource(string.Format("test {0}", i)));
+                }
+            });
+        }
 
-			for (int i = 0; i < 10; i++)
-			{
-				names.Add(new IDSource(string.Format("test {0}", i)));
-			}
+        public async void GetFromNames() {
+            await Task.Run(() => {
+                for (int i = 0; i < 10; i++) {
+                    fromValues.Add(new IDSource(string.Format("test {0}", i)));
+                }
+            });
+        }
 
-			return new List<IDSource>(names);
-		}
+        public Task<List<string>> GetIdNames(bool from = false) {
+            throw new NotImplementedException();
+        }
 
-		public List<IDSource> GetFromNames()
-		{
-			return GetToNames();
-		}
-	}
+        public Task<List<string>> Convert(List<string> from, List<string> to, List<string> keywords) {
+            throw new NotImplementedException();
+        }
+    }
 }
