@@ -20,15 +20,13 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 
 		public MainWindowViewModel(IDataService ds) {
 			dataSource = ds;
-            FromValuesList = fillFromValues();
-            ToValuesList = fillToValues();
-		}
-        
-		#region Member variables
-		/// <summary>
-		/// Available types of values to convert from
-		/// </summary>
-		private List<IDSource> fromValuesList;
+        }
+
+        #region Member variables
+        /// <summary>
+        /// Available types of values to convert from
+        /// </summary>
+        private List<IDSource> fromValuesList;
 
 		/// <summary>
 		/// Available types of values to convert to
@@ -47,7 +45,7 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 
 		private DelegateCommand<Window> closeCommand;
 		private DelegateCommand convertCommand;
-		private DelegateCommand updateCurrentFromCommand;
+		private DelegateCommand<IDSource> updateCurrentFromCommand;
 		private DelegateCommand updateCurrentToCommand;
 		private DelegateCommand<string> parseTextCommand;
 		private string keywords;
@@ -60,7 +58,7 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		/// </summary>
 		public List<IDSource> FromValuesList
 		{
-			get { return fromValuesList ?? (fromValuesList = new List<IDSource>()); }
+			get { return fromValuesList ?? (fromValuesList = dataSource.GetFromNames()); }
 			set
 			{
 				this.fromValuesList = value;
@@ -73,7 +71,7 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		/// </summary>
 		public List<IDSource> ToValuesList
 		{
-			get { return toValuesList ?? (toValuesList = new List<IDSource>()); }
+			get { return toValuesList ?? (toValuesList = dataSource.GetToNames()); }
 			set
 			{
 				this.toValuesList = value;
@@ -145,13 +143,13 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 			get { return convertCommand ?? (convertCommand = new DelegateCommand(showConvertionData, CanExecuteConvertCommand)); }
 		}
 
-		public DelegateCommand UpdateCurrentFromCommand
+		public DelegateCommand<IDSource> UpdateCurrentFromCommand
 		{
 			get
 			{
 				if (updateCurrentFromCommand == null)
 				{
-					updateCurrentFromCommand = new DelegateCommand(UpdateCurrentFrom, CanUpdateCurrentFrom);
+					updateCurrentFromCommand = new DelegateCommand<IDSource>(s => CurrentFrom = s, CanUpdateCurrentFrom);
 				}
 				return updateCurrentFromCommand;
 			}
@@ -192,10 +190,6 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		internal bool CanParseText(object p)
 		{
 			return Keywords.Length > 0;
-		}
-
-		internal void UpdateCurrentFrom(object s)
-		{
 		}
 
 		internal void UpdateCurrentTo(object s)

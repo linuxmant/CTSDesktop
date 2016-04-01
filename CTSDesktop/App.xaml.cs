@@ -29,7 +29,7 @@ namespace Fiehnlab.CTSDesktop {
             }
 
             Stopwatch timer = new Stopwatch();
-            SplashViewModel svm = new SplashViewModel(dataSource);
+            SplashViewModel svm = new SplashViewModel();
             SplashView splash = new SplashView();
             splash.DataContext = svm;
 
@@ -42,17 +42,15 @@ namespace Fiehnlab.CTSDesktop {
 				timer.Start();
 
 				svm.Status = "Initializing...";
-				MainWindow2 window = new MainWindow2();
-				MainWindowViewModel mv = (MainWindowViewModel)window.DataContext;
+                MainWindowViewModel mv = new MainWindowViewModel(dataSource);
+                MainWindow2 window = new MainWindow2();
+                window.DataContext = mv;
 
-				// load From values and select default 'Chemical Name'
-				mv.FromValuesList = svm.FromValues;
-				mv.CurrentFrom = new IDSource("Chemical Name");
+                var cn = mv.FromValuesList.Find(obj => obj.Name == "Chemical Name");
+                cn.IsSelected = true;
+                mv.CurrentFrom = cn;
 
-				// load To values and select default 'InChIKey'
-				mv.ToValuesList = svm.ToValues;
-
-				var inchikey = mv.ToValuesList.Find(obj => obj.Name == "InChIKey");
+                var inchikey = mv.ToValuesList.Find(obj => obj.Name == "InChIKey");
 				inchikey.IsSelected = true;
 				mv.CurrentTo.Add(inchikey);
 
@@ -74,6 +72,9 @@ namespace Fiehnlab.CTSDesktop {
 				MessageBox.Show("[App Startup] Error: " + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown();
 			}
+            finally {
+                splash.Close();
+            }
 		}
 
 		private void MeasureScreenAndSetMainWindowDimensions()

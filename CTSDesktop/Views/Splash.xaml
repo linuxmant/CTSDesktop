@@ -15,11 +15,11 @@
     <Window.Background>
         <ImageBrush ImageSource="../Media/carbon-mesh-land.png"/>
     </Window.Background>
-    <i:Interaction.Triggers>
+<!--    <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadIdNameValuesCommand}"/>
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
     <DockPanel>
         <StackPanel Orientation="Vertical" Margin="10" DockPanel.Dock="Top">
             <Label Name="Header" Content="Chemical Translation Service" 

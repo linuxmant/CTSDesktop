@@ -16,8 +16,7 @@ namespace Fiehnlab.CTSRest {
         public CtsRestClient() {
 			Client = new HttpClient();
             Client.BaseAddress = new Uri(Properties.Resources.CTS_URL);
-            //Client.DefaultRequestHeaders.Add("Content-Type", Properties.Resources.HEADERS_JSON);
-		}
+        }
 
         //internal RestClient Client
         internal HttpClient Client
@@ -35,21 +34,24 @@ namespace Fiehnlab.CTSRest {
             List<string> names = new List<string>();
 
             if (from) {
-                names = fetchNames(Properties.Resources.CTS_REST_FROMNAMES_PATH, Client).Result;
+                names = fetchNames(Properties.Resources.CTS_REST_FROMNAMES_PATH).Result;
             } else {
-                names = fetchNames(Properties.Resources.CTS_REST_TONAMES_PATH, Client).Result;
+                names = fetchNames(Properties.Resources.CTS_REST_TONAMES_PATH).Result;
             }
             //Console.WriteLine("found {0} names", names.Count);
 
             return names;
         }
 
-        private async Task<List<string>> fetchNames(string path, HttpClient client) {
+        private async Task<List<string>> fetchNames(string path) {
             string res = "";
             List<string> ls = new List<string>();
 
             try {
-                using (HttpResponseMessage response = await client.GetAsync(path)) {
+                using (HttpClient cli = new HttpClient()) {
+                    cli.BaseAddress = new Uri(Properties.Resources.CTS_URL);
+
+                    var response = client.GetAsync(path).Result;
                     using (HttpContent content = response.Content) {
                         res = await content.ReadAsStringAsync();
                     }
