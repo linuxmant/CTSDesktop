@@ -38,7 +38,7 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		/// <summary>
 		/// This contains the type of value to convert from
 		/// </summary>
-		private string currentFrom;
+		private IDSource currentFrom;
 
 		/// <summary>
 		/// This contains a list of types of values to convert to.
@@ -85,9 +85,9 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		/// CurrentFrom property accessors
 		/// </summary>
 		[Required]
-		public string CurrentFrom
+		public IDSource CurrentFrom
 		{
-			get { return currentFrom ?? (currentFrom = ""); }
+			get { return currentFrom ?? (currentFrom = new IDSource("")); }
 			set
 			{
 				currentFrom = value;

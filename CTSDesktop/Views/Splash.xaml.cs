@@ -1,5 +1,4 @@
-﻿using Fiehnlab.CTSDesktop.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Fiehnlab.CTSDesktop.Views {
     /// <summary>
@@ -9,7 +8,6 @@ namespace Fiehnlab.CTSDesktop.Views {
 
 		public SplashView() {
             InitializeComponent();
-            DataContext = new SplashViewModel();
         }
     }
 }

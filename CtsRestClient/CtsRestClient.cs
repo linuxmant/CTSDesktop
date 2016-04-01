@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Fiehnlab.CTSRest {
-    public class CtsRestClient : ICtsRestClient
+    public class CtsRestClient : IRestClient
     {
 		//private RestClient client;
         private HttpClient client;
@@ -48,9 +48,14 @@ namespace Fiehnlab.CTSRest {
             string res = "";
             List<string> ls = new List<string>();
 
-            using (HttpResponseMessage response = await client.GetAsync(path))
-            using (HttpContent content = response.Content) {
-                res = await content.ReadAsStringAsync();
+            try {
+                using (HttpResponseMessage response = await client.GetAsync(path)) {
+                    using (HttpContent content = response.Content) {
+                        res = await content.ReadAsStringAsync();
+                    }
+                }
+            }catch(Exception ex) {
+                Console.WriteLine("rest client error\n" + ex.GetType().Name + "\n" + ex.StackTrace);
             }
 
             foreach (var s in res.Split(',')) {

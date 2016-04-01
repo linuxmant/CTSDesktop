@@ -136,7 +136,7 @@
                         <Label x:Name="LabelFrom" Content="Convert From"/>
                         <ComboBox x:Name="FromValues" MinHeight="25" 
                 				ItemsSource="{Binding FromValuesList}" 
-                				SelectedItem="{Binding CurrentFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                				SelectedItem="{Binding CurrentFrom.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 				IsSynchronizedWithCurrentItem="True"
                 				ToolTip="Select source ID" TabIndex="1">
                             <i:Interaction.Triggers>

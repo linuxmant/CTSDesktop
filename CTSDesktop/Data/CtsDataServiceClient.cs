@@ -10,28 +10,29 @@ using System.Windows;
 
 namespace Fiehnlab.CTSDesktop.Data
 {
-    public class CtsDataServiceClient : ObservableObject//, IDataService 
+    public class CtsDataServiceClient : ObservableObject, IDataService 
     {
-        ICtsRestClient client;
+        IRestClient client;
 
-        public CtsDataServiceClient(ICtsRestClient cli) {
+        public CtsDataServiceClient(IRestClient cli) {
             client = cli;
         }
 
-        //public List<IDSource> GetFromNames() {
-        //    List<IDSource> list = new List<IDSource>();
-        //    Task t = client.GetIdNames(true);
-        //    try {
-        //        t.Wait();
-                
-        //    } catch(AggregateException ex) {
-        //        MessageBox.Show("Error getting ID Names");
-        //    }
+        public List<IDSource> GetFromNames() {
+            return convertNames(true);
+        }
 
-        //}
+        public List<IDSource> GetToNames() {
+            return convertNames();
+        }
 
-        //public List<IDSource> GetToNames() {
-        //    throw new NotImplementedException();
-        //}
+        private List<IDSource> convertNames(bool from = false) {
+            List<IDSource> list = new List<IDSource>();
+            foreach (string name in client.GetIdNames(from)) {
+                list.Add(new IDSource(name));
+            }
+
+            return list;
+        }
     }
 }

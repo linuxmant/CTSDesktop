@@ -11,8 +11,7 @@
         HorizontalAlignment="Center" 
         MaxWidth="600" MaxHeight="400" 
         WindowStartupLocation="CenterScreen" 
-        ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="None" Topmost="True"
-        DataContext="SplashViewModel">
+        ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="None" Topmost="True">
     <Window.Background>
         <ImageBrush ImageSource="../Media/carbon-mesh-land.png"/>
     </Window.Background>

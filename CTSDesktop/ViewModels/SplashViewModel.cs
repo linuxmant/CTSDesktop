@@ -1,8 +1,10 @@
-﻿using Fiehnlab.CTSDesktop.Models;
+﻿using Fiehnlab.CTSDesktop.Data;
+using Fiehnlab.CTSDesktop.Models;
 using Fiehnlab.CTSDesktop.MVVM;
-using Fiehnlab.CTSRest;
+using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.ComponentModel;
+using System.Windows;
 
 namespace Fiehnlab.CTSDesktop.ViewModels {
 
@@ -10,9 +12,9 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
 		#region Member vars
 		private string appVersion = "{version}";
 		private string status = "{status}";
-		private ICtsRestClient cli;
-        private List<IDSource> fromValues = new List<IDSource>();
-        private List<IDSource> toValues = new List<IDSource>();
+        private List<IDSource> fromValues;
+        private List<IDSource> toValues;
+        private IDataService dataSource;
         #endregion
 
         #region Properties
@@ -60,30 +62,32 @@ namespace Fiehnlab.CTSDesktop.ViewModels {
         /// <summary>
         /// Creates a new instance of a SplashViewModel
         /// </summary>
-        public SplashViewModel() {
+        public SplashViewModel(IDataService ds) {
 			AppVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Status = "Initializing...";
+            dataSource = ds;
 
-			Status = "Initializing...";
-			cli = new CtsRestClient();
-		}
+            LoadToVals();
+            LoadFromVals();
+        }
 
-		public void GetFromValues()
-		{
-			Status = "Loading From values...";
-            List<IDSource> newFrom = new List<IDSource>();
-            foreach(string name in cli.GetIdNames(true)) {
-                FromValues.Add(new IDSource(name));
+        private void LoadFromVals() {
+            try {
+                Status = "Loading query From types...";
+                fromValues = dataSource.GetFromNames();
+            } catch (Exception ex) {
+                MessageBox.Show("(Splash Init FV) Can't initialize application...\n" + ex.Message, "ERROR");
             }
-            //return newFrom;
-		}
+        }
 
-		public void GetToValues()
-		{
-			Status = "Loading To values...";
-			foreach (string name in cli.GetIdNames())
-			{
-				ToValues.Add(new IDSource(name));
-			}
-		}
-	}
+        private void LoadToVals() {
+            try {
+                Status = "Loading query To types...";
+                toValues = dataSource.GetToNames();
+            } catch (Exception ex) {
+                MessageBox.Show("(Splash Init TV) Can't initialize application...\n" + ex.Message, "ERROR");
+            }
+        }
+
+    }
 }
